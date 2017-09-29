@@ -61,8 +61,8 @@ class PRNG():
         uni = 0.0
         i97 = self.I97
         j97 = self.J97
-        if not self.test:
-            self.InitialiseRandomSeq(1802,9373)
+        #if not self.test:
+        #   self.InitialiseRandomSeq(1802,9373)
         uni = self.u[i97-1] - self.u[j97-1]
         if uni <= 0.0:
             uni += 1

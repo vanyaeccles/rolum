@@ -12,6 +12,12 @@ drolls = []
 form = '''<!DOCTYPE html>
   <title>Rol Um</title>
   <form method="POST">
+    <textarea name="seed1"></textarea>  
+    <textarea name="seed2"></textarea>  
+    <button type="submit" name="dtype" value="0">Generate!</button>
+  </form>
+  
+  <form method="POST">
     <button type="submit" name="dtype" value="4">Roll a d4!</button>
   </form>
   <form method="POST">
@@ -52,6 +58,24 @@ class Roller(http.server.BaseHTTPRequestHandler):
         data = self.rfile.read(length).decode()
         # Extract the "dtype" field from the request data.
         dtype = parse_qs(data)["dtype"][0]
+        
+        if int(dtype) == 0:
+            #reset the prng
+            
+            seed1 = parse_qs(data)["seed1"][0] 
+            seed2 = parse_qs(data)["seed2"][0] 
+            #if seed1 == None:
+            #    seed1 = '2312'
+            #if seed2 == None:
+            #    seed2 = '13789'
+            self.prng.InitialiseRandomSeq(int(seed1), int(seed2))
+            #clear roll history
+            drolls.clear()
+            self.send_response(303)
+            self.send_header('Location', '/')
+            self.end_headers()
+            return
+        
         
         # process for type
         d, value = self.prng.GetRandomInt(dtype)
