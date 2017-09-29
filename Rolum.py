@@ -10,7 +10,9 @@ from urllib.parse import unquote, parse_qs
 drolls = []
 
 form = '''<!DOCTYPE html>
-  <title>Rol Um</title>
+  
+  <title>Rol Um</title> 
+  
   <form method="POST">
     <textarea name="seed1"></textarea>  
     <textarea name="seed2"></textarea>  
@@ -35,6 +37,7 @@ form = '''<!DOCTYPE html>
   <pre>
 {}
   </pre>
+
 '''
 
 class ThreadHTTPServer(ThreadingMixIn, http.server.HTTPServer):
@@ -61,13 +64,10 @@ class Roller(http.server.BaseHTTPRequestHandler):
         
         if int(dtype) == 0:
             #reset the prng
-            
             seed1 = parse_qs(data)["seed1"][0] 
             seed2 = parse_qs(data)["seed2"][0] 
-            #if seed1 == None:
-            #    seed1 = '2312'
-            #if seed2 == None:
-            #    seed2 = '13789'
+            print(seed1)
+            print(seed2)
             self.prng.InitialiseRandomSeq(int(seed1), int(seed2))
             #clear roll history
             drolls.clear()
