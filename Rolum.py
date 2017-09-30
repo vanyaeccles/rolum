@@ -85,7 +85,7 @@ class Roller(http.server.BaseHTTPRequestHandler):
         d, value = self.prng.GetRandomInt(dtype)
         
         # Store it in memory.
-        entry = "Rolled a " + str(d) + ", got a " + str(int(value))
+        entry = "Rolled a d" + str(d) + ", got a " + str(int(value))
         drolls.insert(0, entry)
 
         # 1. Send a 303 redirect back to the root page.
