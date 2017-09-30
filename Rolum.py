@@ -63,12 +63,15 @@ class Roller(http.server.BaseHTTPRequestHandler):
         dtype = parse_qs(data)["dtype"][0]
         
         if int(dtype) == 0:
-            #reset the prng
-            seed1 = parse_qs(data)["seed1"][0] 
-            seed2 = parse_qs(data)["seed2"][0] 
-            print(seed1)
-            print(seed2)
-            self.prng.InitialiseRandomSeq(int(seed1), int(seed2))
+            if parse_qs(data):
+                seed1 = parse_qs(data)["seed1"][0] 
+                seed2 = parse_qs(data)["seed2"][0]
+                self.prng.InitialiseRandomSeq(int(seed1), int(seed2))
+            #else:
+                #seed1 = (self.random.random() * 30000)
+                #seed2 = (self.random.random() * 30000)
+                #self.prng.InitialiseRandomSeq(int(1234), int(3545))
+                #pass
             #clear roll history
             drolls.clear()
             self.send_response(303)

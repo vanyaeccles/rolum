@@ -1,5 +1,8 @@
 import random
 
+# Algorithm adapted from (and further details available at) http://paulbourke.net/miscellaneous/random/
+
+
 class PRNG():
 
     # global values
