@@ -12,13 +12,15 @@ drolls = []
 form = '''<!DOCTYPE html>
   
   <title>Rol Um</title> 
-  
+  <br /> 
+  <strong>Rol Um Dice</strong>
+  <br />  <br /> 
   <form method="POST">
-    <textarea name="seed1"></textarea>  
-    <textarea name="seed2"></textarea>  
+    <textarea name="seed1">Enter an integer between 0 and 30,000</textarea>  
+    <textarea name="seed2">Enter an integer between 0 and 30,000</textarea>  
     <button type="submit" name="dtype" value="0">Generate!</button>
   </form>
-  
+  <br /> 
   <form method="POST">
     <button type="submit" name="dtype" value="4">Roll a d4!</button>
   </form>
@@ -48,25 +50,24 @@ class Roller(http.server.BaseHTTPRequestHandler):
     
     # for number generation
     prng = PRNG()
-    #first = True
         
     def do_POST(self):
        
-        if not self.prng.test:
-            return
         
         # How long was the message?
         length = int(self.headers.get('Content-length', 0))
         # Read the correct amount of data from the request.
         data = self.rfile.read(length).decode()
         # Extract the "dtype" field from the request data.
-        dtype = parse_qs(data)["dtype"][0]
+        if parse_qs(data)["dtype"][0]:
+            dtype = parse_qs(data)["dtype"][0]
         
         if int(dtype) == 0:
-            if parse_qs(data):
+            if parse_qs(data)["seed1"][0] and parse_qs(data)["seed2"][0]:
                 seed1 = parse_qs(data)["seed1"][0] 
                 seed2 = parse_qs(data)["seed2"][0]
                 self.prng.InitialiseRandomSeq(int(seed1), int(seed2))
+            # @TODO - figure out how to handle case when user doesn't enter seeds
             #else:
                 #seed1 = (self.random.random() * 30000)
                 #seed2 = (self.random.random() * 30000)
@@ -96,7 +97,6 @@ class Roller(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         # First, send a 200 OK response.
         self.send_response(200)
-
         # Then send headers.
         self.send_header('Content-type', 'text/html; charset=utf-8')
         self.end_headers()
